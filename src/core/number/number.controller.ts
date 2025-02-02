@@ -41,7 +41,8 @@ const classifyNumber = async (req: Request, res: Response) => {
 
   try {
     const response = await axios.get(`http://numbersapi.com/${num}/math`);
-    return res.json({
+
+    const responseObj = {
       number: num,
       is_prime: isPrime(num),
       is_perfect: isPerfect(num),
@@ -51,9 +52,11 @@ const classifyNumber = async (req: Request, res: Response) => {
         .split("")
         .reduce((sum, digit) => sum + parseInt(digit, 10), 0),
       fun_fact: response.data,
-    });
+    };
+
+    return res.send(JSON.stringify(responseObj));
   } catch (error) {
-    return res.json({
+    const responseObj = {
       number: num,
       is_prime: isPrime(num),
       is_perfect: isPerfect(num),
@@ -63,7 +66,9 @@ const classifyNumber = async (req: Request, res: Response) => {
         .split("")
         .reduce((sum, digit) => sum + parseInt(digit, 10), 0),
       fun_fact: "No fun fact available",
-    });
+    };
+
+    return res.send(JSON.stringify(responseObj));
   }
 };
 
