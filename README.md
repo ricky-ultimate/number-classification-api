@@ -28,8 +28,6 @@ The **Number Classification API** is a RESTful service that accepts a number and
 ```
 number-classification-api/
 │── src/
-│   ├── config/
-│   │   ├── db.config.ts       # Prisma database connection
 │   ├── constants/
 │   │   ├── env.ts             # Environment variables
 │   │   ├── routes.ts          # API route constants
@@ -50,7 +48,7 @@ number-classification-api/
 ## 🏃‍♂️ Getting Started
 ### 1️⃣ Clone the Repository
 ```sh
-git clone https://github.com/your-username/number-classification-api.git
+git clone https://github.com/ricky-ultimate/number-classification-api.git
 cd number-classification-api
 ```
 
@@ -63,7 +61,6 @@ npm install
 Create a `.env` file and add:
 ```env
 PORT=5001
-DATABASE_URL=your_database_url
 ```
 
 ### 4️⃣ Start the Server (Development Mode)
