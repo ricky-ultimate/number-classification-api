@@ -32,18 +32,16 @@ const classifyNumber = async (req: Request, res: Response) => {
   const numStr = req.query.number as string;
   const num = parseInt(numStr, 10);
 
-  // Handle invalid input
   if (isNaN(num)) {
     return res.status(400).json({ number: numStr, error: true });
   }
 
-  // Determine properties
+  const absNum = Math.abs(num); // Convert negative to positive for digit sum
   const properties = [];
   if (isArmstrong(num)) properties.push("armstrong");
   properties.push(num % 2 === 0 ? "even" : "odd");
 
   try {
-    // Use Promise.all for parallel execution
     const [funFactResponse] = await Promise.all([
       axios.get(`http://numbersapi.com/${num}/math`),
     ]);
@@ -53,10 +51,10 @@ const classifyNumber = async (req: Request, res: Response) => {
       is_prime: isPrime(num),
       is_perfect: isPerfect(num),
       properties,
-      digit_sum: num
+      digit_sum: absNum
         .toString()
         .split("")
-        .reduce((sum, digit) => sum + parseInt(digit, 10), 0),
+        .reduce((sum, digit) => sum + parseInt(digit, 10), 0), // Works correctly for negatives
       fun_fact: funFactResponse.data,
     });
   } catch (error) {
@@ -65,7 +63,7 @@ const classifyNumber = async (req: Request, res: Response) => {
       is_prime: isPrime(num),
       is_perfect: isPerfect(num),
       properties,
-      digit_sum: num
+      digit_sum: absNum
         .toString()
         .split("")
         .reduce((sum, digit) => sum + parseInt(digit, 10), 0),
