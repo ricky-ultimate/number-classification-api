@@ -114,3 +114,6 @@ GET /api/classify-number?number=28
   "error": true
 }
 ```
+
+#### Hire Node.js Developers
+[Node.js Developers on HNG](https://hng.tech/hire/nodejs-developers)
