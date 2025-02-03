@@ -29,18 +29,25 @@ const isPerfect = (num: number): boolean => {
 };
 
 const classifyNumber = async (req: Request, res: Response) => {
-  const num = parseInt(req.query.number as string, 10);
+  const numStr = req.query.number as string;
+  const num = parseInt(numStr, 10);
 
+  // Handle invalid input
   if (isNaN(num)) {
-    return res.status(400).json({ number: req.query.number, error: true });
+    return res.status(400).json({ number: numStr, error: true });
   }
 
+  // Determine properties
   const properties = [];
   if (isArmstrong(num)) properties.push("armstrong");
   properties.push(num % 2 === 0 ? "even" : "odd");
 
   try {
-    const response = await axios.get(`http://numbersapi.com/${num}/math`);
+    // Use Promise.all for parallel execution
+    const [funFactResponse] = await Promise.all([
+      axios.get(`http://numbersapi.com/${num}/math`),
+    ]);
+
     return res.json({
       number: num,
       is_prime: isPrime(num),
@@ -50,7 +57,7 @@ const classifyNumber = async (req: Request, res: Response) => {
         .toString()
         .split("")
         .reduce((sum, digit) => sum + parseInt(digit, 10), 0),
-      fun_fact: response.data,
+      fun_fact: funFactResponse.data,
     });
   } catch (error) {
     return res.json({
