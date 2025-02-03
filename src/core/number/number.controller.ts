@@ -31,7 +31,7 @@ const isPerfect = (num: number): boolean => {
 
 const classifyNumber = async (req: Request, res: Response) => {
   const numStr = req.query.number as string;
-  const num = parseInt(numStr, 10);
+  const num = Number(numStr);
 
   if (isNaN(num)) {
     return res.status(400).json({ number: numStr, error: true });
