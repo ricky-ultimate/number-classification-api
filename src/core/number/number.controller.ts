@@ -10,10 +10,11 @@ const isPrime = (num: number): boolean => {
 };
 
 const isArmstrong = (num: number): boolean => {
-  const digits = num.toString().split("").map(Number);
+  const absNum = Math.abs(num);
+  const digits = absNum.toString().split("").map(Number);
   const power = digits.length;
   const sum = digits.reduce((acc, digit) => acc + Math.pow(digit, power), 0);
-  return sum === num;
+  return sum === absNum;
 };
 
 const isPerfect = (num: number): boolean => {
@@ -36,10 +37,15 @@ const classifyNumber = async (req: Request, res: Response) => {
     return res.status(400).json({ number: numStr, error: true });
   }
 
-  const absNum = Math.abs(num); // Convert negative to positive for digit sum
+  const absNum = Math.abs(num);
   const properties = [];
   if (isArmstrong(num)) properties.push("armstrong");
   properties.push(num % 2 === 0 ? "even" : "odd");
+
+  const digitSum = absNum
+    .toString()
+    .split("")
+    .reduce((sum, digit) => sum + parseInt(digit, 10), 0);
 
   try {
     const [funFactResponse] = await Promise.all([
@@ -51,10 +57,7 @@ const classifyNumber = async (req: Request, res: Response) => {
       is_prime: isPrime(num),
       is_perfect: isPerfect(num),
       properties,
-      digit_sum: absNum
-        .toString()
-        .split("")
-        .reduce((sum, digit) => sum + parseInt(digit, 10), 0), // Works correctly for negatives
+      digit_sum: num < 0 ? `-${digitSum}` : digitSum, // Append "-" for negatives
       fun_fact: funFactResponse.data,
     });
   } catch (error) {
@@ -63,10 +66,7 @@ const classifyNumber = async (req: Request, res: Response) => {
       is_prime: isPrime(num),
       is_perfect: isPerfect(num),
       properties,
-      digit_sum: absNum
-        .toString()
-        .split("")
-        .reduce((sum, digit) => sum + parseInt(digit, 10), 0),
+      digit_sum: num < 0 ? `-${digitSum}` : digitSum,
       fun_fact: "No fun fact available",
     });
   }
