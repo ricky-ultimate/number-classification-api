@@ -1,7 +1,7 @@
 {
   "name": "number-classification-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Stage 1 project for HNG12 Internship program",
   "main": "src/index.ts",
   "scripts": {
     "dev": "nodemon src/index.ts",
